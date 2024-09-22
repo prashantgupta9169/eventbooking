@@ -19,7 +19,7 @@ import com.eventbooking.domain.UserRepository;
 import com.eventbooking.exception.NotFoundException;
 import com.eventbooking.service.TicketBookingService;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -37,7 +37,7 @@ public class TicketBookingServiceImpl implements TicketBookingService {
     @Transactional
     public TicketBookingResponse bookTicket(TicketBookingRequest ticketBookingRequest) {
         Long eventId = ticketBookingRequest.getEventId();
-        Optional<Event> event = this.eventRepository.findById(eventId);
+        Optional<Event> event = this.eventRepository.findByIdForUpdate(eventId);
         if (!event.isPresent()) {
             throw new NotFoundException("Event not found");
         }
